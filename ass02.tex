@@ -1,0 +1,96 @@
+%!Tex Program = xelatex
+\documentclass[a4paper]{ctexart}
+%\documentclass[a4paper,fontset=none]{ctexbook}
+%\ctexset{fontset=ubuntu} %设定CTeX宏包所采用的字体配置为ubuntu
+
+\usepackage{xltxtra}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{ulem}
+\usepackage{array}
+\usepackage{booktabs}
+
+
+\lstdefinestyle{lfonts}{
+basicstyle = \footnotesize\ttfamily,
+stringstyle = \color{purple},
+keywordstyle = \color{blue!60!black}\bfseries,
+commentstyle = \color{olive}\scshape,
+}
+\lstdefinestyle{lnumbers}{
+numbers = left,
+numberstyle = \tiny,
+numbersep = 1em,
+firstnumber = 1,
+stepnumber = 1,
+}
+\lstdefinestyle{llayout}{
+breaklines = true,
+tabsize = 2,
+columns = flexible,
+}
+\lstdefinestyle{lgeometry}{
+xleftmargin = 20pt,
+xrightmargin = 0pt,
+frame = tb,
+framesep = \fboxsep,
+framexleftmargin = 20pt,
+}
+\lstdefinestyle{lgeneral}{
+style = lfonts,
+style = lnumbers,
+style = llayout,
+style = lgeometry,
+}
+\lstdefinestyle{python}{
+language = {Python},
+style = lgeneral,
+}
+
+
+\newcounter{alg}[section]
+\renewcommand{\thealg}{\arabic{chapter}.\arabic{alg}}
+
+\newtheorem{definition}{定义}[section]
+
+\newtheorem{theorem}{定理}[section]
+
+\newtheorem{example}{例}[section]
+
+%\setmainfont[Mapping=tex-text]{AR PL UMing CN:style=Light}
+%\setmainfont[Mapping=tex-text]{AR PL UKai CN:style=Book}
+%\setmainfont[Mapping=tex-text]{WenQuanYi Zen Hei:style=Regular}
+%\setmainfont[Mapping=tex-text]{WenQuanYi Zen Hei Sharp:style=Regular}
+%\setmainfont[Mapping=tex-text]{AR PL KaitiM GB:style=Regular} 
+%\setmainfont[Mapping=tex-text]{AR PL SungtiL GB:style=Regular} 
+%\newfontfamily\hei{WenQuanYi Micro Hei}
+%\newfontfamily\whei{WenQuanYi Zen Hei}
+
+\setCJKfamilyfont{kai}{KaiTi}
+\newcommand{\kai}{\CJKfamily{kai}}
+\setCJKfamilyfont{song}{SimSun}
+\newcommand{\song}{\CJKfamily{song}}
+\setCJKfamilyfont{fangsong}{FangSong}
+\newcommand{\fs}{\CJKfamily{fangsong}}
+\setCJKfamilyfont{hei}{SimHei}
+\newcommand{\hei}{\CJKfamily{hei}}
+\setCJKfamilyfont{lishu}{LiSu}
+\newcommand{\lishu}{\CJKfamily{lishu}}
+
+%\setmainfont[Mapping=tex-text]{Ubuntu}
+%\setsansfont[Mapping=tex-text]{Ubuntu}
+%\setmonofont[Mapping=tex-text]{Ubuntu}
+%\setCJKmainfont[BoldFont = SimHei, ItalicFont = FangSong]{SimSun}
+
+\renewcommand{\baselinestretch}{1.0}
+\begin{document}
+\section*{第二周作业}
+
+(1) 求证：若$\eta$服从$U(0, 1)$，则$1 - \eta$也服从$U(0, 1)$；
+
+(2) 求证：$\xi = -\lambda \log \eta$服从参数为$\lambda > 0$的指数分布。
+\end{document}

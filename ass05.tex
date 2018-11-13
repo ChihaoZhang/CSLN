@@ -1,0 +1,113 @@
+%!Tex Program = xelatex
+\documentclass[a4paper]{ctexart}
+%\documentclass[a4paper,fontset=none]{ctexbook}
+%\ctexset{fontset=ubuntu} %设定CTeX宏包所采用的字体配置为ubuntu
+
+\usepackage{xltxtra}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{ulem}
+\usepackage{array}
+\usepackage{booktabs}
+
+
+\lstdefinestyle{lfonts}{
+basicstyle = \footnotesize\ttfamily,
+stringstyle = \color{purple},
+keywordstyle = \color{blue!60!black}\bfseries,
+commentstyle = \color{olive}\scshape,
+}
+\lstdefinestyle{lnumbers}{
+numbers = left,
+numberstyle = \tiny,
+numbersep = 1em,
+firstnumber = 1,
+stepnumber = 1,
+}
+\lstdefinestyle{llayout}{
+breaklines = true,
+tabsize = 2,
+columns = flexible,
+}
+\lstdefinestyle{lgeometry}{
+xleftmargin = 20pt,
+xrightmargin = 0pt,
+frame = tb,
+framesep = \fboxsep,
+framexleftmargin = 20pt,
+}
+\lstdefinestyle{lgeneral}{
+style = lfonts,
+style = lnumbers,
+style = llayout,
+style = lgeometry,
+}
+\lstdefinestyle{python}{
+language = {Python},
+style = lgeneral,
+}
+
+
+\newcounter{alg}[section]
+\renewcommand{\thealg}{\arabic{chapter}.\arabic{alg}}
+
+\newtheorem{definition}{定义}[section]
+
+\newtheorem{theorem}{定理}[section]
+
+\newtheorem{example}{例}[section]
+
+%\setmainfont[Mapping=tex-text]{AR PL UMing CN:style=Light}
+%\setmainfont[Mapping=tex-text]{AR PL UKai CN:style=Book}
+%\setmainfont[Mapping=tex-text]{WenQuanYi Zen Hei:style=Regular}
+%\setmainfont[Mapping=tex-text]{WenQuanYi Zen Hei Sharp:style=Regular}
+%\setmainfont[Mapping=tex-text]{AR PL KaitiM GB:style=Regular} 
+%\setmainfont[Mapping=tex-text]{AR PL SungtiL GB:style=Regular} 
+%\newfontfamily\hei{WenQuanYi Micro Hei}
+%\newfontfamily\whei{WenQuanYi Zen Hei}
+
+\setCJKfamilyfont{kai}{KaiTi}
+\newcommand{\kai}{\CJKfamily{kai}}
+\setCJKfamilyfont{song}{SimSun}
+\newcommand{\song}{\CJKfamily{song}}
+\setCJKfamilyfont{fangsong}{FangSong}
+\newcommand{\fs}{\CJKfamily{fangsong}}
+\setCJKfamilyfont{hei}{SimHei}
+\newcommand{\hei}{\CJKfamily{hei}}
+\setCJKfamilyfont{lishu}{LiSu}
+\newcommand{\lishu}{\CJKfamily{lishu}}
+
+%\setmainfont[Mapping=tex-text]{Ubuntu}
+%\setsansfont[Mapping=tex-text]{Ubuntu}
+%\setmonofont[Mapping=tex-text]{Ubuntu}
+%\setCJKmainfont[BoldFont = SimHei, ItalicFont = FangSong]{SimSun}
+
+\renewcommand{\baselinestretch}{1.0}
+\begin{document}
+
+\section*{第五周作业}
+
+
+1. 请用Python绘制心形曲线，参数方程如下
+$$
+\left\{
+\begin{array}{rcl}
+  x & = & 2 \cos(t) - \cos(2t) \\
+  y & = & 2 \sin(t) - \sin(2t)
+\end{array}
+\right.
+$$
+其中$0 \leq t \leq 2\pi$。
+
+(1) 用MC方法计算它的面积，其中$n = 10000$，给出代码，面积和精度的估计；
+
+(2) 对$\delta = 0.01$，计算置信区间，给出代码和计算过程；
+
+(3) 心形曲线的面积是$\frac{3}{2}\pi$，请验证你的计算结果，给出必要的统计图。
+
+注：可以使用讲义提供的程序。
+\end{document}

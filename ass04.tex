@@ -1,0 +1,119 @@
+%!Tex Program = xelatex
+\documentclass[a4paper]{ctexart}
+%\documentclass[a4paper,fontset=none]{ctexbook}
+%\ctexset{fontset=ubuntu} %设定CTeX宏包所采用的字体配置为ubuntu
+
+\usepackage{xltxtra}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{ulem}
+\usepackage{array}
+\usepackage{booktabs}
+
+
+\lstdefinestyle{lfonts}{
+basicstyle = \footnotesize\ttfamily,
+stringstyle = \color{purple},
+keywordstyle = \color{blue!60!black}\bfseries,
+commentstyle = \color{olive}\scshape,
+}
+\lstdefinestyle{lnumbers}{
+numbers = left,
+numberstyle = \tiny,
+numbersep = 1em,
+firstnumber = 1,
+stepnumber = 1,
+}
+\lstdefinestyle{llayout}{
+breaklines = true,
+tabsize = 2,
+columns = flexible,
+}
+\lstdefinestyle{lgeometry}{
+xleftmargin = 20pt,
+xrightmargin = 0pt,
+frame = tb,
+framesep = \fboxsep,
+framexleftmargin = 20pt,
+}
+\lstdefinestyle{lgeneral}{
+style = lfonts,
+style = lnumbers,
+style = llayout,
+style = lgeometry,
+}
+\lstdefinestyle{python}{
+language = {Python},
+style = lgeneral,
+}
+
+
+\newcounter{alg}[section]
+\renewcommand{\thealg}{\arabic{chapter}.\arabic{alg}}
+
+\newtheorem{definition}{定义}[section]
+
+\newtheorem{theorem}{定理}[section]
+
+\newtheorem{example}{例}[section]
+
+%\setmainfont[Mapping=tex-text]{AR PL UMing CN:style=Light}
+%\setmainfont[Mapping=tex-text]{AR PL UKai CN:style=Book}
+%\setmainfont[Mapping=tex-text]{WenQuanYi Zen Hei:style=Regular}
+%\setmainfont[Mapping=tex-text]{WenQuanYi Zen Hei Sharp:style=Regular}
+%\setmainfont[Mapping=tex-text]{AR PL KaitiM GB:style=Regular} 
+%\setmainfont[Mapping=tex-text]{AR PL SungtiL GB:style=Regular} 
+%\newfontfamily\hei{WenQuanYi Micro Hei}
+%\newfontfamily\whei{WenQuanYi Zen Hei}
+
+\setCJKfamilyfont{kai}{KaiTi}
+\newcommand{\kai}{\CJKfamily{kai}}
+\setCJKfamilyfont{song}{SimSun}
+\newcommand{\song}{\CJKfamily{song}}
+\setCJKfamilyfont{fangsong}{FangSong}
+\newcommand{\fs}{\CJKfamily{fangsong}}
+\setCJKfamilyfont{hei}{SimHei}
+\newcommand{\hei}{\CJKfamily{hei}}
+\setCJKfamilyfont{lishu}{LiSu}
+\newcommand{\lishu}{\CJKfamily{lishu}}
+
+%\setmainfont[Mapping=tex-text]{Ubuntu}
+%\setsansfont[Mapping=tex-text]{Ubuntu}
+%\setmonofont[Mapping=tex-text]{Ubuntu}
+%\setCJKmainfont[BoldFont = SimHei, ItalicFont = FangSong]{SimSun}
+
+\renewcommand{\baselinestretch}{1.0}
+\begin{document}
+
+\section*{第四周作业}
+
+
+1. 复习讲义中的Monte Carlo方法，可以证明（不需要证明，但可以考虑一下）
+  \begin{eqnarray}
+    \lim_{n \to \infty} \mathrm{corr}[\bar{\lambda}_n, V[\bar{\lambda}_n]] =
+    \left\{
+    \begin{array}{ll}
+      1,& \mbox{若} 0 \leq \lambda < \frac{1}{2} \\
+      0,& \mbox{若} \lambda = \frac{1}{2} \\
+      -1, & \mbox{若} \frac{1}{2} < \lambda \leq 1.
+    \end{array}
+    \right.
+  \end{eqnarray}
+  其中,
+  $$ \mathrm{corr}[X, Y] = \frac{\mathrm{cov}[X,
+      Y]}{\sqrt{\mathrm{var} X \cdot \mathrm{var} Y}},
+  $$
+  而
+  $$
+  \mathrm{cov}[X, Y] = E[XY] - E(X)E(Y).
+  $$
+
+  上面的结果会导致什么后果？解释为何标准误差
+  $\sqrt{V[\bar{\lambda}_n]}$不是一个好的误差估计，并用程序验证你的结
+  论。可以直接使用求圆面积的Monte Carlo程序（见第一章代码），也可以自
+  己设计。
+\end{document}
