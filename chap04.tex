@@ -630,7 +630,7 @@ $$
     \label{thm::conf_int3}
 \end{theorem}
 
-具体应用时，取$I_1(S, n, \delta) = \rho_1(frac{S}{n}, n, \delta)$和
+具体应用时，取$I_1(S, n, \delta) = \rho_1(\frac{S}{n}, n, \delta)$和
 $I_2(S, n, \delta) = \rho_2(\frac{S}{n}, n, \delta)$。在求解过程中，需
 要关于$w$的方程，可以用和之前一样的求根技巧。以上三个方法，请大家自行
 编写代码验证，这里给出一些结果供对比。
@@ -751,5 +751,59 @@ $\mathscr{R}_L$和$\mathscr{R}_U$之间的点。第二种是考虑整个
 $\mathscr{R}_U \backslash \mathscr{R}_L$区域被$\alpha_{Li}$，
 $\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$3^m - 1$个小超矩形块。
 我们当然不能逐个均匀投点（原因？）然而我们可以先从这些块中，按体积为概
-率选择一个，再再上面均匀投点，这样投点的计算量仍然是$\theta(m)$的。
+率选择一个，再在上面均匀投点，这样投点的计算量仍然是$\theta(m)$的。
 这两种策略的具体实现都参见参考书2.5节。
+
+\section{网络可靠性}
+
+接下去我们讨论一个MC方法的应用例子。首先我们需要一点点图论的知识。令
+$G$表示一个无向网络（undirected network），它的顶点（nodes）编号的集合是
+$\mathscr{V}$，而全部边（edges）编号的集合是
+$$
+\mathscr{E} = \{1, 2, \cdots, m\}.
+$$
+我们现在考虑这个由顶点和边组成的网络，假设全部的顶点都是可靠的，但边
+的可靠性却是一个独立的随机事件。也即$\forall i \in \mathscr{E}$，这条
+边连通的概率是$q_i$，而有$1 - q_i$的概率是不连通的。现在用随机变量$y_i$
+表示一条边是否连通的状态，也即
+$$
+y_i = \left\{
+\begin{array}{ll}
+  1, & \mbox{边$i$是连通的};\\
+  0, & \mbox{其它}.
+\end{array}
+\right.
+$$
+则$\vec{y} = (y_1, y_2, \cdots, y_m)$表示整个网络$m$条边的状态。用
+$\mathscr{Y}$表示全部$\vec{y}$可能状态的集合。
+
+对$\forall s, t \in \mathscr{V}$，令
+$$
+\phi(\vec{y}) = \left\{
+\begin{array}{ll}
+  1, & \mbox{若$s$和$t$在$\vec{y}$状态下是连通的}.\\
+  0, & \mbox{其它}.
+\end{array}
+\right.
+$$
+再令
+$$
+P(y, q) = \prod_{i \in \mathscr{E}} q_i^{y_i}(1 - q_i)^{1 - y_i},
+$$
+其中
+$$
+\vec{q} = (q_1, \cdots, q_m),
+$$
+则我们关心的是$s$和$t$之间连通的概率，也即
+\begin{equation}
+  g(\vec{q}) = \sum_{\vec{y} \in \mathscr{Y}} \phi(\vec{y}) P(\vec{y}, \vec{q}),
+\end{equation}
+称作网络关于可靠性向量$\vec{q}$的$s-t$可靠性。如果$\vec{q}$是已知的，那么$g(\vec{q})$
+是可计算的（computable）。它应该就严格等于
+\begin{equation}
+  g()\vec{q} = \sum_{\vec{y} \in \mathscr{Y}_1} P(\vec{y}, \vec{q}),
+\end{equation}
+其中
+$$
+\vec{Y}_1 = \{\vec{y} \in \mathscr{Y} \left| \phi(\vec{y}) = 1\right.\}.
+$$
