@@ -549,16 +549,16 @@ $$
 
 
 \begin{theorem}{}
-  令$S$有均值$n \lambda$和方差$n \lambda(1 - \lambda)$，定义
+  令$S$有期望$n \lambda$和方差$n \lambda(1 - \lambda)$，定义
   \begin{equation}
-    \omega_i(z, n, \beta) = \frac{z + \frac{\beta^2}{2} +
-      \beta(-1)^i\sqrt{\frac{\beta^2}{4} + \frac{z(n - z)}{n}}}{n +
+    \omega_i(S, n, \beta) = \frac{S + \frac{\beta^2}{2} +
+      \beta(-1)^i\sqrt{\frac{\beta^2}{4} + \frac{S(n - S)}{n}}}{n +
       \beta^2}
     \label{eq::conf_int2}
   \end{equation}
-  其中$\beta > 0$，$n \in \mathbb{N}^+$，$0 \leq z \leq n$并且$i = 1,
+  其中$\beta > 0$，$n \in \mathbb{N}^+$，$0 \leq S \leq n$并且$i = 1,
   2$。则存在$\beta = \beta(\delta)$使得开区间$(\omega_1(S, n, \beta),
-  \omega_2(S, n, \beta))$以概率$\geq 1 - \delta$覆盖了$\lambda$。
+  \omega_2(S, n, \beta))$以大于$\geq 1 - \delta$的概率覆盖了$\lambda$。
   \label{thm::conf_int2}
 \end{theorem}
 
@@ -601,7 +601,7 @@ $$
 
 \begin{theorem}{\hei Fishman 1991}
   令$Z_1$，$\cdots$，$Z_n$为独立随机变量，且$\mu = E[Z_i] \in (0, 1)$，
-  $P\{0 \geq Z_i \geq 1\} = 1$，令
+  $P\{0 \leq Z_i \leq 1\} = 1$，令
   $$
   \bar{Z} = \frac{Z_1 + \cdots + Z_n}{n},
   $$
@@ -623,7 +623,7 @@ $$
       \right.
       \label{eq::conf_int3_rho_1}
       \end{equation}
-      其中$w$的定义如(\ref{cor::hoeff_3})。则
+      其中$w$的定义如(\ref{eq::hoeffding1963_w})。则
       $$
       P\{\rho_1(\bar{Z}_n, n, \delta) < \mu < \rho_2(\bar{Z}_n, n, \delta)\} \geq 1 - \delta.
       $$
@@ -654,17 +654,19 @@ $I_2(S, n, \delta) = \rho_2(\frac{S}{n}, n, \delta)$。在求解过程中，需
 
 我们这里介绍的只是误差估计的非常基础的部分，更深入的理论和分析需要更专
 业的统计学知识，大家可参阅相关资料。参考书2.4-2.5章也提供了更多的讨论。
-我们在这一节最后集中讨论一下一个在计算机模拟中常见的策略。如果存在
+
+\section{界的估计}
+我们在这一节集中讨论一下一个在计算机模拟中常见的策略。如果存在
 $\mathscr{R}$的超矩形下界$\mathscr{R}_L$和上界$\mathscr{R}_U$（在二维
   可以想像成一个内接矩形和一个外接矩形），那么我们的随机投点范围可以缩
 小，从而提高算法效率。这里可令
 \begin{equation}
-  \mathscr{R}_{L} = \{\vec{x} \in \mathscr{J}^m : 0 \leq \alpha_{Li} \leq x
+  \mathscr{R}_{L} = \{\vec{x} \in \mathscr{J}^m : 0 \leq \alpha_{Li} \leq x_i
   \leq \beta_{Li} \leq 1, 1 \leq i \leq m\}
 \end{equation}
 和
 \begin{equation}
-  \mathscr{R}_{U} = \{\vec{x} \in \mathscr{J}^m : 0 \leq \alpha_{Ui} \leq x
+  \mathscr{R}_{U} = \{\vec{x} \in \mathscr{J}^m : 0 \leq \alpha_{Ui} \leq x_i
   \leq \beta_{Ui} \leq 1, 1 \leq i \leq m\}
 \end{equation}
 并且，对$\forall \vec{x} \in \mathscr{J}^m$，如果$\vec{x} \in
@@ -696,7 +698,7 @@ $\lambda_L$越大越好同时$\lambda_U$越小越好，然后我们可以通过�
 \begin{theorem}{}
   令
   \begin{equation}
-    \Phi_L(\vec{x}) = \left\{
+    \phi_L(\vec{x}) = \left\{
     \begin{array}{ll}
       1,& \vec{x} \in \mathscr{R}_L\\
       0,& \mbox{其他}.
@@ -706,15 +708,16 @@ $\lambda_L$越大越好同时$\lambda_U$越小越好，然后我们可以通过�
   \end{equation}
   和
   \begin{equation}
-  \Phi_L(\vec{x}) = \left\{
+  \phi_U(\vec{x}) = \left\{
   \begin{array}{ll}
-    1,& \vec{x} \in \mathscr{R}_L\\
+    1,& \vec{x} \in \mathscr{R}_U\\
     0,& \mbox{其他}.
     \end{array}
     \right.
     \label{eq::sta_U}
   \end{equation}
-  若$f(x)$表示$U(0, 1)$的PDF，令$\vec{X}$服从PDF为：
+  若$f(\vec{x})$表示在$\mathscr{J}^m$均匀分布的概率密度函数，令
+  $\vec{X}$服从的概率密度函数为：
   \begin{equation}
     f(\vec{x}, \lambda_L, \lambda_U) = \frac{\phi_L(\vec{x}) -
       \phi_U(\vec{x})}{\lambda_U - \lambda_L}f(\vec{x}), \vec{x} \in
@@ -744,15 +747,70 @@ $\lambda_L$越大越好同时$\lambda_U$越小越好，然后我们可以通过�
     \label{thm::hyperrectangle}
 \end{theorem}
 
-这个定理的证明是简单的。接下去的问题如何产生服从$f(\vec{x}, \lambda_L,
-\lambda_U)$的随机数？办法基本上有两种，一种是仍然产生在整个
+这个定理的证明是简单的。定理中的$\phi(\vec{x})$的取值为
+\begin{equation}
+  \phi(\vec{x}) = \left\{
+  \begin{array}{ll}
+    1,& \vec{x} \in \mathscr{R}\\
+    0,& \mbox{其他}.
+  \end{array}
+  \right.
+  \label{eq::sta}
+\end{equation}
+
+接下去的问题如何产生服从$f(\vec{x}, \lambda_L,\lambda_U)$的随机数？
+办法基本上有两种，一种是仍然产生在整个
 $\mathscr{J}^m$均匀分布的点，但是用拒绝接受（AR）策略来过滤出落在
 $\mathscr{R}_L$和$\mathscr{R}_U$之间的点。第二种是考虑整个
 $\mathscr{R}_U \backslash \mathscr{R}_L$区域被$\alpha_{Li}$，
 $\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$3^m - 1$个小超矩形块。
 我们当然不能逐个均匀投点（原因？）然而我们可以先从这些块中，按体积为概
-率选择一个，再在上面均匀投点，这样投点的计算量仍然是$\theta(m)$的。
-这两种策略的具体实现都参见参考书2.5节。
+率选择一个，再在上面均匀投点，这样投点的计算量仍然是$\theta(m)$的。这
+两种策略的具体实现都参见参考书2.5节。具体的MC算法相应修改为如算法（\ref{alg::MC_S}）。
+
+\begin{minipage}[!ht]{0.8\textwidth}
+\vspace{3ex}
+\refstepcounter{alg}
+\label{alg::MC_S}
+\begin{center}
+ 算法 \arabic{chapter}.\arabic{alg} 在上下界估计下的MC方法
+\end{center}
+\small
+\begin{tabular}{ll}
+  \hei 目标&估算$\lambda(\mathscr{R})$.\\
+  \hei 输入&包含在
+  $\mathscr{J}^m$中的区域$\mathscr{R}$, $\lambda(\mathscr{R})$的下界估计$\lambda_L$
+  和上界估计$\lambda_U$, 样本尺寸$n$, 置信水平$1 - \delta$. \\
+  \hei 输出& 无偏点估计：$\bar{\lambda}_n(\mathscr{R})$, 方差$\mathrm{var}
+  \bar{\lambda}_n(\mathscr{R})$ 以及置信区间.
+\end{tabular}
+\begin{enumerate}
+\item $j = 1$, $S = 0$.
+\item While $j \leq n$:
+  \begin{enumerate}
+    \item 生成$\vec{X}^{(j)}$服从概率密度函数$f(\vec{x}, \lambda_L, \lambda_U)$.
+    \item $\phi(\vec{X}^{(j)}) = 0$.
+    \item If $\vec{X}^{(j)} \in \mathscr{R}, \phi(\vec{X}^{(j)}) = 1$.
+    \item $S = S + \phi(\vec{X}^{(j)})$.
+    \item j = j + 1.
+  \end{enumerate}
+\item 做统计分析:
+  \begin{enumerate}
+  \item 计算$\bar{\lambda}_n(\mathscr{R})
+    = \lambda_L + (\lambda_U - \lambda_L)S/n$作为$\lambda(\mathscr{R})$的点估计.
+  \item 计算$V[\bar{\lambda}_n(\mathscr{R})]
+    = (\lambda_U - \lambda_L)^2(S / n)(1 - S / n) / (n - 1)$
+    作为$\mathrm{var~} \bar{\lambda}_n(\mathscr{R})$的点估计.
+  \item 根据置信水平计算百分之$100 \times (1 - \delta)$的置信区间：
+    $$
+    I_i(S, n, \delta) = \lambda_L + (\lambda_u - \lambda_L)\tilde{I_i},
+    i = 1, 2.
+    $$
+    这里$\tilde{I_i}$是原MC中对应的置信区间界.
+  \end{enumerate}
+\end{enumerate}
+\end{minipage}
+
 
 \section{网络可靠性}
 
@@ -852,7 +910,7 @@ $$
 
 再令
 $$
-P(y, q) = \prod_{i \in \mathscr{E}} q_i^{y_i}(1 - q_i)^{1 - y_i},
+P(\vec{y}, \vec{q}) = \prod_{i \in \mathscr{E}} q_i^{y_i}(1 - q_i)^{1 - y_i},
 $$
 其中
 $$
@@ -860,10 +918,9 @@ $$
 $$
 则我们关心的是$s$和$t$之间连通的概率，也即
 \begin{equation}
-  g(\vec{q}) = \sum_{\vec{y} \in \mathscr{Y}} \phi(\vec{y}) P(\vec{y}, \vec{q}),
+  g(\vec{q}) = \sum_{\vec{y} \in \mathscr{Y}} \phi(\vec{y}) P(\vec{y}, \vec{q}).
 \end{equation}
-称作网络关于可靠性向量$\vec{q}$的$s-t$可靠性。如果$\vec{q}$是已知的，那么$g(\vec{q})$
-是可计算的（computable）。它应该就严格等于
+如果$\vec{q}$是已知的，那么$g(\vec{q})$是可计算的（computable）。它应该就严格等于
 \begin{equation}
   g(\vec{q}) = \sum_{\vec{y} \in \mathscr{Y}_1} P(\vec{y}, \vec{q}),
   \label{eq::network_relia}
