@@ -786,6 +786,70 @@ $$
 \end{array}
 \right.
 $$
+
+\begin{figure}[!ht]
+  \centering
+    \begin{tikzpicture}
+	\path [use as bounding box] (-4,-2.25) rectangle (4,5.5);
+	\begin{pgfonlayer}{nodelayer}
+		\node [style=wn] (0) at (-1, 3) {1};
+		\node [style=wn] (1) at (1, 3) {2};
+		\node [style=wn] (2) at (-1.5, 1.5) {5};
+		\node [style=wn] (3) at (1.5, 1.5) {3};
+		\node [style=wn] (4) at (3, 1.25) {9};
+		\node [style=wn] (5) at (0, 1.75) {6};
+		\node [style=wn] (6) at (-2, 4.25) {7};
+		\node [style=wn] (7) at (2, 4.25) {8};
+		\node [style=wn] (8) at (0, 0.25) {4};
+		\node [style=wn] (9) at (0, -1.25) {10};
+		\node [style=wn] (10) at (-3, 1.25) {11};
+		\node [style=none] (11) at (-0.25, 2.5) {1};
+		\node [style=none] (12) at (0.25, 2.5) {2};
+		\node [style=none] (13) at (0.75, 2) {3};
+		\node [style=none] (14) at (0.25, 1) {4};
+		\node [style=none] (15) at (-0.75, 2) {5};
+		\node [style=none] (16) at (0, 3.25) {6};
+		\node [style=none] (17) at (1.5, 2.25) {7};
+		\node [style=none] (18) at (1, 0.75) {8};
+		\node [style=none] (19) at (-1, 0.75) {9};
+		\node [style=none] (20) at (-1.5, 2.25) {10};
+		\node [style=none] (21) at (1.5, 3.25) {11};
+		\node [style=none] (22) at (2.25, 1.75) {12};
+		\node [style=none] (23) at (0.25, -0.5) {13};
+		\node [style=none] (24) at (-2.25, 1.75) {14};
+		\node [style=none] (25) at (-1.5, 3.25) {15};
+		\node [style=none] (26) at (0, 4.5) {16};
+		\node [style=none] (27) at (2.75, 2.75) {17};
+		\node [style=none] (28) at (2, -0) {18};
+		\node [style=none] (29) at (-1.75, -0.25) {19};
+		\node [style=none] (30) at (-2.75, 3) {20};
+	\end{pgfonlayer}
+	\begin{pgfonlayer}{edgelayer}
+		\draw (0) to (1);
+		\draw (6) to (0);
+		\draw (7) to (1);
+		\draw (0) to (5);
+		\draw (5) to (1);
+		\draw (2) to (5);
+		\draw (5) to (3);
+		\draw (5) to (8);
+		\draw (2) to (8);
+		\draw (8) to (3);
+		\draw (3) to (1);
+		\draw (0) to (2);
+		\draw (10) to (2);
+		\draw (9) to (8);
+		\draw (3) to (4);
+		\draw (4) to (7);
+		\draw (7) to (6);
+		\draw (6) to (10);
+		\draw (10) to (9);
+		\draw (9) to (4);
+	\end{pgfonlayer}
+    \end{tikzpicture}
+\caption{一个网络的示意图}
+\end{figure}
+
 再令
 $$
 P(y, q) = \prod_{i \in \mathscr{E}} q_i^{y_i}(1 - q_i)^{1 - y_i},
@@ -801,9 +865,39 @@ $$
 称作网络关于可靠性向量$\vec{q}$的$s-t$可靠性。如果$\vec{q}$是已知的，那么$g(\vec{q})$
 是可计算的（computable）。它应该就严格等于
 \begin{equation}
-  g()\vec{q} = \sum_{\vec{y} \in \mathscr{Y}_1} P(\vec{y}, \vec{q}),
+  g(\vec{q}) = \sum_{\vec{y} \in \mathscr{Y}_1} P(\vec{y}, \vec{q}),
+  \label{eq::network_relia}
 \end{equation}
 其中
 $$
-\vec{Y}_1 = \{\vec{y} \in \mathscr{Y} \left| \phi(\vec{y}) = 1\right.\}.
+\mathscr{Y}_1 = \{\vec{y} \in \mathscr{Y} \left| \phi(\vec{y}) = 1\right.\}.
 $$
+
+
+然而，如何确定$\mathscr{Y}_1$是一个NP-Hard的问题
+\cite{Provan1984Computing}。在这种情况下，MC方法也成为一个进行计算模拟
+的有效手段。
+
+用$\Gamma$表示网络$G$中点$s-t$的最小切割集（minimal $s-t$ cutsets）全体。
+一个$s-t$的切割集是一些边的集合，在$G$中去除这些边，就会使$s-t$不再连
+通。而最小切割集则表示该集合的任何子集都不会切割$s-t$。于是
+$$
+\begin{array}{rcl}
+\displaystyle \phi(\vec{y}) &=& \displaystyle \prod_{\mathscr{C} \in
+  \Gamma} \left[1 - \prod_{i \in \mathscr{C}}(1 - y_i)\right] \\\\ & =
+& \displaystyle \prod_{\mathscr{C} \in \Gamma}\left[1 - \min_{i \in
+    \mathscr{C}}(1 - y_i)\right].
+\end{array}
+$$
+令$x_i \in [0, 1]$，$i \in \mathscr{E}$，则可取
+$$
+y_i = 1 - \lfloor 1 - q_i + x_i \rfloor.
+$$
+于是$s-t$网络可靠性\ref{eq::network_relia}等价于计算区域
+$$
+\mathscr{R} = \left\{(x_1, \cdots, x_m) \in \mathscr{J}^m
+\left| \min_{\mathscr{C} \in \Gamma} \left[1
+  - \min_{i \in \mathscr{C}}(\lfloor1 - q_i + x_i\rfloor)\right] = 1\right.\right\}.
+$$
+
+我们可以用MC方法求解这个面积。

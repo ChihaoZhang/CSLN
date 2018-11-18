@@ -6,7 +6,7 @@
 \usepackage{xltxtra}
 \usepackage{graphicx}
 \usepackage{listings}
-\usepackage{xcolor}
+%\usepackage{xcolor}
 \usepackage{amssymb,amsfonts,amsmath,amsthm}
 \usepackage[colorlinks,linkcolor=blue]{hyperref}
 \usepackage{fancyhdr}
@@ -15,6 +15,36 @@
 \usepackage{booktabs}
 \usepackage{mathrsfs}
 \usepackage{CJKfntef}
+
+%%% Tikz PIC
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[svgnames]{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{shapes.geometric}
+%\pagestyle{empty}
+
+\pgfdeclarelayer{edgelayer}
+\pgfdeclarelayer{nodelayer}
+\pgfsetlayers{edgelayer,nodelayer,main}
+
+\tikzstyle{none}=[inner sep=0pt]
+
+\tikzstyle{wn}=[circle,fill=White,draw=Black,line width=0.8 pt]
+\tikzstyle{rn}=[circle,fill=Red,draw=Black,line width=0.8 pt]
+\tikzstyle{gn}=[circle,fill=Lime,draw=Black,line width=0.8 pt]
+\tikzstyle{yn}=[circle,fill=Yellow,draw=Black,line width=0.8 pt]
+\tikzstyle{newstyle}=[circle,fill=White,draw=Black]
+
+\tikzstyle{simple}=[-,draw=Black,line width=2.000]
+\tikzstyle{arrow}=[-,draw=Black,postaction={decorate},decoration={markings,mark=at position .5 with {\arrow{>}}},line width=2.000]
+\tikzstyle{tick}=[-,draw=Black,postaction={decorate},decoration={markings,mark=at position .5 with {\draw (0,-0.1) -- (0,0.1);}},line width=2.000]
+
+%\usepackage[graphics,tightpage,active]{preview}
+%\PreviewEnvironment{tikzpicture}
+\newlength{\imagewidth}
+\newlength{\imagescale}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \lstdefinestyle{lfonts}{
 basicstyle = \footnotesize\ttfamily,
