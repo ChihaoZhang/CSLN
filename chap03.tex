@@ -539,7 +539,7 @@ $f(z)$的随机变量。基本步骤为：
   \end{equation}
   我们可以将其写作
   \begin{equation}
-    f(z) = \sqrt{\frac{2e}{\pi}} e^{-\frac{-(z - 1)^2}{2}}e^{-z},
+    f(z) = \sqrt{\frac{2e}{\pi}} e^{\frac{-(z - 1)^2}{2}}e^{-z},
     \label{eq::frac_half_normal}
   \end{equation}
   并令
@@ -700,7 +700,7 @@ $2\sqrt{\frac{2e}{\pi}} \approx 2.631$次函数求值，一次指数运算和一
 \end{equation}
 这里区间$[a, b]$是我们的抽样范围。而且$g_L(z)$和$g_U(z)$都是便于计算的
 函数，那么对是否小于$g(z)$的判定就可以先用这两个界函数过滤一下。如果这
-两个界充分接近$g(z)$，那么有很大机率，我们根本不需要再计算$g(z)$了。也
+两个界充分接近$g(z)$，那么有很大几率，我们根本不需要再计算$g(z)$了。也
 即可以将AR法的基本步骤改为：
 \begin{enumerate}
 \item 产生服从分布$h(z)$的随机变量$Z$；
@@ -765,7 +765,7 @@ $g(Z)$的次数，则
 \end{equation}
 对数函数
 \begin{equation}
-  \frac{z - 1}{z} \leq \ln z \leq -1 + z, z \geq 0.
+  \frac{z - 1}{z} \leq \ln z \leq -1 + z, z > 0.
 \end{equation}
 
 \begin{example} {\hei 对半正态抽样采用挤压法} 在算法\ref{alg::sample_harl_normal}中，我们需要计算

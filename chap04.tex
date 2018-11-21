@@ -175,7 +175,7 @@ Bernoulli分布随机变量，满足
 所以，$S = \phi(\vec{X}^{(1)}) + \cdots + \phi(\vec{X}^{(n)})$服从二项分布
 \begin{equation}
   P\{S = i\} = f_i(n, \lambda) = \binom{n}{i} \lambda^i (1 -
-  \lambda)^{(n - i)}, \lambda = \lambda(\mathscr{R}), i = 0, \cdots, n.
+  \lambda)^{n - i}, \lambda = \lambda(\mathscr{R}), i = 0, \cdots, n.
   \label{eq::MC_Bernoulli}
 \end{equation}
 二项分布的期望和方差分别是$E[S] = n \lambda$和$\mathrm{var~} S =
@@ -492,7 +492,7 @@ $$
 $$
 1 + \alpha_1 - \alpha_2 = \delta
 $$
-的$\alpha_1$和$\alpha_2$，而区间$[\theta_1(S, n, \alpha_1),
+的$\alpha_1$和$\alpha_2$，区间$[\theta_1(S, n, \alpha_1),
   \theta_2(S, n, \alpha_2)]$就是$\mu$关于置信水平$\delta$的范围区间，也即
 $$
 P\{\theta_1(S, n, \alpha_1) < \mu < \theta_2(S, n, \alpha_2)\} \geq 1 - \delta.
@@ -558,7 +558,7 @@ $$
   \end{equation}
   其中$\beta > 0$，$n \in \mathbb{N}^+$，$0 \leq S \leq n$并且$i = 1,
   2$。则存在$\beta = \beta(\delta)$使得开区间$(\omega_1(S, n, \beta),
-  \omega_2(S, n, \beta))$以大于$\geq 1 - \delta$的概率覆盖了$\lambda$。
+  \omega_2(S, n, \beta))$以大于等于$1 - \delta$的概率覆盖了$\lambda$。
   \label{thm::conf_int2}
 \end{theorem}
 
@@ -566,8 +566,8 @@ $$
   由Chebshev不等式，
   \begin{equation}
     P\left\{\frac{\left|\frac{S}{n} - \lambda\right|}{\sqrt{\lambda(1
-        - \lambda)}} < \beta\right\} = P\left\{(\frac{S}{n} -
-    \lambda)^2 < \frac{\beta^2 \lambda (1 - \lambda)}{n}\right\} \leq
+        - \lambda)/n}} < \beta\right\} = P\left\{(\frac{S}{n} -
+    \lambda)^2 < \frac{\beta^2 \lambda (1 - \lambda)}{n}\right\} \geq
     1 -\frac{1}{\beta^2},
     \label{eq::proof_conf_int2}
   \end{equation}
@@ -608,7 +608,7 @@ $$
   对$0 \leq z \leq 1$和$0 < \delta < 1$，定义
   \begin{equation}
     \rho_1(z, n, \delta) = \left\{ \begin{array}{ll}
-      \{t : 0 < t \leq z \leq 1, e^{n w(z - 1, t)} = \frac{\delta}{2} \}& z > 0\\
+      \{t : 0 < t \leq z \leq 1, e^{n w(z - t, t)} = \frac{\delta}{2} \}& z > 0\\
       0 & z = 0.
       \end{array}
       \right.
@@ -669,7 +669,7 @@ $\mathscr{R}$的超矩形下界$\mathscr{R}_L$和上界$\mathscr{R}_U$（在二�
   \mathscr{R}_{U} = \{\vec{x} \in \mathscr{J}^m : 0 \leq \alpha_{Ui} \leq x_i
   \leq \beta_{Ui} \leq 1, 1 \leq i \leq m\}
 \end{equation}
-并且，对$\forall \vec{x} \in \mathscr{J}^m$，如果$\vec{x} \in
+并且，$\forall \vec{x} \in \mathscr{J}^m$，如果$\vec{x} \in
 \mathscr{R}_L$，则必有$\vec{x} \in \mathscr{R}$；如果$\vec{x} \in
 \mathscr{J}^m \backslash \mathscr{R}_U$，则必有$\vec{x} \notin
 \mathscr{R}$.图\ref{fig::hyperrectangle2D}给出了一个二维的例子（俺先盗个图）。
@@ -683,7 +683,7 @@ $\mathscr{R}$的超矩形下界$\mathscr{R}_L$和上界$\mathscr{R}_U$（在二�
   \lambda_U = \prod_{i = 1}^m(\beta_{Ui} - \alpha_{Ui})
   \label{eq::area_upper}
 \end{equation}
-这里如果可能我们会尽可能通过调整$\mathscr{R}_L$和$\mathscr{R}_U$使得
+这里如果可能，我们会尽可能通过调整$\mathscr{R}_L$和$\mathscr{R}_U$使得
 $\lambda_L$越大越好同时$\lambda_U$越小越好，然后我们可以通过缩小投点的
 分布范围获得更多的好处。
 
@@ -719,8 +719,8 @@ $\lambda_L$越大越好同时$\lambda_U$越小越好，然后我们可以通过�
   若$f(\vec{x})$表示在$\mathscr{J}^m$均匀分布的概率密度函数，令
   $\vec{X}$服从的概率密度函数为：
   \begin{equation}
-    f(\vec{x}, \lambda_L, \lambda_U) = \frac{\phi_L(\vec{x}) -
-      \phi_U(\vec{x})}{\lambda_U - \lambda_L}f(\vec{x}), \vec{x} \in
+    f(\vec{x}, \lambda_L, \lambda_U) = \frac{\phi_U(\vec{x}) -
+      \phi_L(\vec{x})}{\lambda_U - \lambda_L}f(\vec{x}), \vec{x} \in
     \mathscr{J}^m.
     \label{eq::hyperrectangle_pdf}
   \end{equation}
@@ -766,7 +766,7 @@ $\mathscr{R}_U \backslash \mathscr{R}_L$区域被$\alpha_{Li}$，
 $\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$3^m - 1$个小超矩形块。
 我们当然不能逐个均匀投点（原因？）然而我们可以先从这些块中，按体积为概
 率选择一个，再在上面均匀投点，这样投点的计算量仍然是$\theta(m)$的。这
-两种策略的具体实现都参见参考书2.5节。具体的MC算法相应修改为如算法（\ref{alg::MC_S}）。
+两种策略的具体实现都参见参考书2.5节。具体的MC算法相应修改为如下算法（\ref{alg::MC_S}）。
 
 \begin{minipage}[!ht]{0.8\textwidth}
 \vspace{3ex}
@@ -803,7 +803,7 @@ $\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$3^m - 1$个小超矩形块�
     作为$\mathrm{var~} \bar{\lambda}_n(\mathscr{R})$的点估计.
   \item 根据置信水平计算百分之$100 \times (1 - \delta)$的置信区间：
     $$
-    I_i(S, n, \delta) = \lambda_L + (\lambda_u - \lambda_L)\tilde{I_i},
+    I_i(S, n, \delta) = \lambda_L + (\lambda_U - \lambda_L)\tilde{I_i},
     i = 1, 2.
     $$
     这里$\tilde{I_i}$是原MC中对应的置信区间界.
@@ -835,7 +835,7 @@ $$
 则$\vec{y} = (y_1, y_2, \cdots, y_m)$表示整个网络$m$条边的状态。用
 $\mathscr{Y}$表示全部$\vec{y}$可能状态的集合。
 
-对$\forall s, t \in \mathscr{V}$，令
+$\forall s, t \in \mathscr{V}$，令
 $$
 \phi(\vec{y}) = \left\{
 \begin{array}{ll}
