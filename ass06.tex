@@ -1,0 +1,104 @@
+%!Tex Program = xelatex
+\documentclass[a4paper]{ctexart}
+%\documentclass[a4paper,fontset=none]{ctexbook}
+%\ctexset{fontset=ubuntu} %设定CTeX宏包所采用的字体配置为ubuntu
+
+\usepackage{xltxtra}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{amssymb,amsfonts,amsmath,amsthm}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{ulem}
+\usepackage{array}
+\usepackage{booktabs}
+
+
+\lstdefinestyle{lfonts}{
+basicstyle = \footnotesize\ttfamily,
+stringstyle = \color{purple},
+keywordstyle = \color{blue!60!black}\bfseries,
+commentstyle = \color{olive}\scshape,
+}
+\lstdefinestyle{lnumbers}{
+numbers = left,
+numberstyle = \tiny,
+numbersep = 1em,
+firstnumber = 1,
+stepnumber = 1,
+}
+\lstdefinestyle{llayout}{
+breaklines = true,
+tabsize = 2,
+columns = flexible,
+}
+\lstdefinestyle{lgeometry}{
+xleftmargin = 20pt,
+xrightmargin = 0pt,
+frame = tb,
+framesep = \fboxsep,
+framexleftmargin = 20pt,
+}
+\lstdefinestyle{lgeneral}{
+style = lfonts,
+style = lnumbers,
+style = llayout,
+style = lgeometry,
+}
+\lstdefinestyle{python}{
+language = {Python},
+style = lgeneral,
+}
+
+
+\newcounter{alg}[section]
+\renewcommand{\thealg}{\arabic{chapter}.\arabic{alg}}
+
+\newtheorem{definition}{定义}[section]
+
+\newtheorem{theorem}{定理}[section]
+
+\newtheorem{example}{例}[section]
+
+%\setmainfont[Mapping=tex-text]{AR PL UMing CN:style=Light}
+%\setmainfont[Mapping=tex-text]{AR PL UKai CN:style=Book}
+%\setmainfont[Mapping=tex-text]{WenQuanYi Zen Hei:style=Regular}
+%\setmainfont[Mapping=tex-text]{WenQuanYi Zen Hei Sharp:style=Regular}
+%\setmainfont[Mapping=tex-text]{AR PL KaitiM GB:style=Regular} 
+%\setmainfont[Mapping=tex-text]{AR PL SungtiL GB:style=Regular} 
+%\newfontfamily\hei{WenQuanYi Micro Hei}
+%\newfontfamily\whei{WenQuanYi Zen Hei}
+
+\setCJKfamilyfont{kai}{KaiTi}
+\newcommand{\kai}{\CJKfamily{kai}}
+\setCJKfamilyfont{song}{SimSun}
+\newcommand{\song}{\CJKfamily{song}}
+\setCJKfamilyfont{fangsong}{FangSong}
+\newcommand{\fs}{\CJKfamily{fangsong}}
+\setCJKfamilyfont{hei}{SimHei}
+\newcommand{\hei}{\CJKfamily{hei}}
+\setCJKfamilyfont{lishu}{LiSu}
+\newcommand{\lishu}{\CJKfamily{lishu}}
+
+%\setmainfont[Mapping=tex-text]{Ubuntu}
+%\setsansfont[Mapping=tex-text]{Ubuntu}
+%\setmonofont[Mapping=tex-text]{Ubuntu}
+%\setCJKmainfont[BoldFont = SimHei, ItalicFont = FangSong]{SimSun}
+
+\renewcommand{\baselinestretch}{1.0}
+\begin{document}
+
+\section*{第九周作业}
+
+
+1. 我们知道，椭圆的轨迹为到两个焦点$(x_1, y_1)$和$(x_2, y_2)$距离之和为定长$L$的曲线。
+
+(1) 用MC方法计算它的面积，并给出面积$\lambda$无偏估计$\bar{\lambda}_n$和$\mathrm{Var}[\bar{\lambda}_n]$；
+
+(2) 估计其面积的上下边界，并给出调整后的抽样方案和新的估计；
+
+(3) 在计算机中测试你的结果。
+
+注：可以使用讲义提供的程序。
+\end{document}

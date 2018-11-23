@@ -758,15 +758,78 @@ $\lambda_L$越大越好同时$\lambda_U$越小越好，然后我们可以通过�
   \label{eq::sta}
 \end{equation}
 
-接下去的问题如何产生服从$f(\vec{x}, \lambda_L,\lambda_U)$的随机数？
-办法基本上有两种，一种是仍然产生在整个
-$\mathscr{J}^m$均匀分布的点，但是用拒绝接受（AR）策略来过滤出落在
-$\mathscr{R}_L$和$\mathscr{R}_U$之间的点。第二种是考虑整个
-$\mathscr{R}_U \backslash \mathscr{R}_L$区域被$\alpha_{Li}$，
-$\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$3^m - 1$个小超矩形块。
-我们当然不能逐个均匀投点（原因？）然而我们可以先从这些块中，按体积为概
-率选择一个，再在上面均匀投点，这样投点的计算量仍然是$\theta(m)$的。这
-两种策略的具体实现都参见参考书2.5节。具体的MC算法相应修改为如下算法（\ref{alg::MC_S}）。
+接下去的问题如何产生服从$f(\vec{x}, \lambda_L,\lambda_U)$的随机数？办
+法基本上有两种，一种是仍然产生在整个$\mathscr{J}^m$均匀分布的点，但是
+用拒绝接受（AR）策略来过滤出落在$\mathscr{R}_L$和$\mathscr{R}_U$之间的
+点。第二种是考虑整个$\mathscr{R}_U \backslash \mathscr{R}_L$区域被
+$\alpha_{Li}$，$\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$m$个区
+域，每个区域由两个小超矩形块组成。我们可以先从这些块中，按体积为概率选
+择一个，再在上面均匀投点，这样投点的计算量仍然是$\theta(m)$的。这两种
+策略的具体实现都参见参考书2.5节。其中第50页的Version C是上面的第二种思
+路的$m$维一般化，见算法（\ref{alg::MC_bound_sample_directly}）。
+
+\begin{minipage}[!ht]{0.8\textwidth}
+\vspace{3ex}
+\refstepcounter{alg}
+\label{alg::MC_bound_sample_directly}
+\begin{center}
+ 算法 \arabic{chapter}.\arabic{alg} $m$维超矩形上下界约束下的直接抽取
+\end{center}
+\small
+\begin{tabular}{ll}
+  \hei 目标&对$\mathscr{R}_L \subset \mathscr{R}_U \subset \mathscr{J}^m$,
+  直接抽取在$\mathscr{R}_U \backslash \mathscr{R}_L$中均匀分布的随机向量$\vec{X}$.\\
+  \hei 输入&包含在
+  $\mathscr{J}^m$中的超矩形区域$\mathscr{R}_L$和$\mathscr{R}_U$的顶点坐标数据
+  $\alpha_{Lj}, \beta_{Lj}, \alpha_{Uj}, \beta_{Uj}$,\\
+  &且$\mathscr{R}_L \subset \mathscr{R}_U$, $j = 1, 2, \cdots, m$.
+\end{tabular}
+\begin{enumerate}
+\item 计算分块的体积（测度），并由此产生落入各分块的累计分布函数$s_j$,
+  $j = 1, 2, \cdots, m$. 
+\item 产生一个服从$U(0, 1)$的随机数$Z$, 根据$Z$具体位置产生实际抽样分块
+  $J \in \{1, 2, \cdots, m\}$, $s_J-1 \leq Z < s_J$, $s_0 = 0$.
+\item 计算$\Delta_1 = \beta_{Uj} - \beta_{Lj}$, $\Delta_2 = \alpha_{Lj} - \alpha_{Uj}$,
+  $j = 1, 2, \cdots, m$.
+\item While $j \leq J$:
+  \begin{enumerate}
+    \item 产生服从$U(\alpha_{Lj}, \beta_{Lj})$的随机数$X_j$;
+    \item j = j + 1.
+  \end{enumerate}
+\item 产生服从$U(0, 1)$的随机数$Y$,
+  $$
+  X_J = \beta_{LJ} + \left\lfloor(\Delta_1 + \Delta_2) Y / \Delta_1\right\rfloor
+  (\alpha_{UJ} - \beta_{UJ}) + Y(\Delta_1 + \Delta_2).
+  $$
+\item j = j + 1.
+\item While $j \leq m$:
+  \begin{enumerate}
+  \item 产生服从$U(\alpha_{Lj}, \beta_{Uj})$的随机数$X_j$.
+  \item j = j + 1.
+  \end{enumerate}
+\end{enumerate}
+\end{minipage}
+
+在算法（\ref{alg::MC_bound_sample_directly}）中，$s_j$的生成如下：令$a_i = \beta_{Li} - \alpha_{Li}$，$b_i = \beta_{Ui} - \alpha_{Ui}$，$1 \leq i \leq m$,
+\begin{equation}
+  s_j = \left\{
+  \begin{array}{ll}
+    \displaystyle (b_1 - a_1)\left(\prod_{i = 2}^m b_i\right) \cdot \frac{1}
+    {\lambda_U - \lambda_L}, & j = 1\\\\
+    \displaystyle \left(\prod_{i = 1}^{j - 1} a_i\right)(b_j - a_j)
+    \left(\prod_{i = j + 1}^m b_i\right) \cdot \frac{1}{\lambda_U - \lambda_L}, &
+    1 < j < m.\\\\
+    \displaystyle (b_m - a_m)\left(\prod_{i = 1}^{m - 1}a_i\right) \cdot \frac{1}{\lambda_U - \lambda_L}, & j = m.
+  \end{array}
+  \right.
+\end{equation}
+其中
+$$
+\lambda_L = \prod_{i = 1}^m a_i, \lambda_U = \prod_{i = 1}^m b_i.
+$$
+
+
+而具体的MC算法相应修改为如下算法（\ref{alg::MC_S}）。
 
 \begin{minipage}[!ht]{0.8\textwidth}
 \vspace{3ex}
@@ -950,11 +1013,148 @@ $$
 $$
 y_i = 1 - \lfloor 1 - q_i + x_i \rfloor.
 $$
-于是$s-t$网络可靠性\ref{eq::network_relia}等价于计算区域
+于是$s-t$网络可靠性（\ref{eq::network_relia}）等价于计算区域
 $$
 \mathscr{R} = \left\{(x_1, \cdots, x_m) \in \mathscr{J}^m
 \left| \min_{\mathscr{C} \in \Gamma} \left[1
   - \min_{i \in \mathscr{C}}(\lfloor1 - q_i + x_i\rfloor)\right] = 1\right.\right\}.
 $$
 
-我们可以用MC方法求解这个面积。
+我们可以用MC方法求解这个面积。同样地，为了提高采样精度，我们可以来考虑
+$\lambda_L$和$\lambda_U$。也就是$\mathscr{R}$的上下界估计，同时这种估
+计还要能够满足简单采样的要求。
+
+我们用$\mathscr{P}_1, \mathscr{P}_2, \cdots, \mathscr{P}_I$表示网络$G$
+的全部$I$个$s-t$不相交最短路径集（edge-disjoint paths），即
+$\forall i \in \{1, 2, \cdots, I\}$，$\mathscr{P}_i$中的边构成$s$到$t$
+在$G$中的最短路径，且$\mathscr{P}_i \cap \mathscr{P}_j = \emptyset$，
+$\forall i \neq j$。类似地，记$\mathscr{C}_1, \mathscr{C}_2, \cdots,
+\mathscr{C}_J$为$J$个$G$中的$s-t$不相交最小切割集（edge-disjoint
+  minimal $s-t$ cutsets）。令
+$$
+\phi_L(\vec{y}) = \left\{
+\begin{array}{ll}
+  1, & \mbox{若$\vec{y}$在至少在一个不相交最短路径集上全部连通},\\
+  0, & \mbox{其他}.
+\end{array}
+\right.
+$$
+（若$\phi_L(\vec{y}) = 1$则$s-t$必然连通。）类似地，令
+$$
+\phi_U(\vec{y}) = \left\{
+\begin{array}{ll}
+  1, & \mbox{若$\vec{y}$在每个不相交最小切割集中都至少有一条边连通},\\
+  0, & \mbox{其他}.
+\end{array}
+\right.
+$$
+（若$\phi_U(\vec{y}) = 0$则说明至少有一个不相交最小切割集完成了切割，
+  因此$s-t$必然分离。）等价地，
+\begin{equation}
+  \begin{array}{rcl}
+\phi_L(\vec{y}) &=& \displaystyle 1 - \prod_{j = 1}^I\left(1 - \prod_{i \in
+  \mathscr{P}_j} y_i\right), \\
+\phi_U(\vec{y}) &=& \displaystyle \prod_{j = 1}^J\left(1 - \prod_{i \in
+  \mathscr{C}_j} (1 - y_i)\right).
+  \end{array}
+  \label{eq::network_phi_lu}
+\end{equation}
+
+注意到必然有$\phi_L(\vec{y}) \leq \phi(\vec{y}) \leq \phi_U(\vec{y})$，于是可构建
+\begin{equation}
+  \begin{array}{rcl}
+  g_L(\vec{q}) &=&\displaystyle \sum_{\vec{y} \in \mathscr{Y}}
+  \phi_L(\vec{y}) P(\vec{y}, \vec{p}),\\ &=&\displaystyle 1 - \prod_{j
+    = 1}^I\left(1 - \prod_{i \in \mathscr{P}_j}q_i\right)
+  \end{array}
+  \label{eq::network_gl}
+\end{equation}
+和
+\begin{equation}
+  \begin{array}{rcl}
+  g_U(\vec{q}) &=&\displaystyle \sum_{\vec{y} \in \mathscr{Y}}
+  \phi_L(\vec{y}) P(\vec{y}, \vec{p}),\\ &=&\displaystyle
+  \prod_{j = 1}^J\left(1 - \prod_{i \in \mathscr{C}_j}(1 - q_i)\right)
+  \end{array}
+  \label{eq::network_gu}
+\end{equation}
+作为MC方法估算$g(\vec{q})$的上下界。这个估算是重要的，因为显然，满足
+$\phi_U(\vec{y}) = 1$的$\vec{y}$要比$\vec{y}$的全部$2^m$种组合少得多。
+因此这种界的约束可以极大地降低模拟结果的方差。类似（\ref{eq::hyperrectangle_pdf}），
+我们可以构建概率密度函数
+\begin{equation}
+  P(\vec{y}, \vec{q}, \lambda_L, \lambda_U) = \frac{\phi_U(\vec{y}) -
+    \phi_L(\vec{y})}{g_U(\vec{q}) - g_L(\vec{q})}P(\vec{y} - \vec{q}), \vec{y}
+  \in \mathscr{Y}.
+  \label{eq::network_bound_pdf}
+\end{equation}
+若随机向量$\vec{Y}$服从$P(\vec{y}, \vec{q}, \lambda_L, \lambda_U)$，则
+\begin{equation}
+  \psi(\vec{Y}) = g_L(\vec{q}) + (g_U(\vec{q}) - g_L(\vec{q})) \phi(\vec{Y})
+  \label{eq::network_bound_estimate_g}
+\end{equation}
+的期望是$g(\vec{q})$且
+\begin{equation}
+  \begin{array}{rcl}
+  \mathrm{var} \phi(\vec{Y}) &=& (g_U(\vec{q}) - g(\vec{q}))
+  (g(\vec{q}) - g_L(\vec{q}))\\
+  & \leq& \displaystyle \frac{(g_U(\vec{q}) - g_L(\vec{q}))^2}{4}.
+  \end{array}
+  \label{eq::network_bound_estimate_var}
+\end{equation}
+
+现在总结一下MC模拟网络可靠性的算法，即算法\ref{alg::MC_Network}。
+
+\begin{minipage}[!ht]{0.8\textwidth}
+\vspace{3ex}
+\refstepcounter{alg}
+\label{alg::MC_Network}
+\begin{center}
+ 算法 \arabic{chapter}.\arabic{alg} 估算$s-t$网络可靠性$g(\vec{q})$
+\end{center}
+\small
+\begin{tabular}{ll}
+  \hei 目标&估算$g(\vec{q})$.\\
+  \hei 输入& 网络$G = (\mathscr{V}, \mathscr{E})$, 起点$s$, 终点$t$,
+  网络可靠性向量$\vec{q}$, 置信水平$\delta$. \\
+  \hei 输出& $g(\vec{q})$的无偏点估计$\hat{g}_n(\vec{q})$,
+  $\mathrm{var} \hat{g}_n(\vec{q})$,  以及关于$\delta$的置信区间.
+\end{tabular}
+\begin{enumerate}
+\item 计算$g_L(\vec{q})$和$g_U(\vec{q})$.
+\item $j = 1$, $S = 0$.
+\item While $j \leq n$:
+  \begin{enumerate}
+  \item 生成$\vec{Y} = (Y_1, \cdots, Y_m)$服从概率密度函数
+    $P(\vec{y}, \vec{q}, \lambda_L, \lambda_U)$.
+    \item $\phi(\vec{X}^{(j)}) = 0$.
+    \item If $s$ 和 $t$ 连通，$\phi(\vec{Y}) = 1$.
+    \item $S = S + \phi(\vec{Y}$.
+    \item j = j + 1.
+  \end{enumerate}
+\item 做统计分析:
+  \begin{enumerate}
+  \item 计算$\hat{g}_n(\vec{q}) = g_L(\vec{q}) + [g_U(\vec{q}) -
+    g_L(\vec{q})] S/n$作为$g(\vec{q})$的点估计.
+  \item 计算$V[\hat{g}_n(\vec{q})] = (g_U(\vec{q}) -
+    \hat{g}_n(\vec{q}))(\hat{g}_n(\vec{q}) - g_L(\vec{q})) / (n -1)$作
+    为$\mathrm{var} \hat{g}_n(\vec{q})$的点估计.
+  \item 根据置信水平计算百分之$100 \times (1 - \delta)$的置信区间：
+    $$
+    I_i(S, n, \delta) = g_L(\vec{q}) + (g_U(\vec{q}) - g_L(\vec{q}))\tilde{I_i},
+    i = 1, 2.
+    $$
+    这里$\tilde{I_i}$是原MC中对应的置信区间界.
+  \end{enumerate}
+\end{enumerate}
+\end{minipage}
+
+算法\ref{alg::MC_Network}还有几个细节没有说明，首先是如何产生
+$\mathrm{P}_i$和$\mathrm{C}_i$集合，以及如何判定在$G$中的两点$s$和$t$s
+是否连通。这些是涉及图论的算法，资料很多，大家自己查阅。其次是如何产生
+分布$P(\vec{y}, \vec{q}, \lambda_L, \lambda_U)$，由于问题复杂，参考书
+建议直接采用AR方法，也即先根据$\vec{q}$随机产生$\vec{y}$，然后拒绝
+$\phi_U(\vec{y}) = 0$和$\phi_L(\vec{y}) = 1$的样本。如何直接产生满足要
+求的样本是一个可以考虑的问题。但这个问题有一定的深度和难度。
+
+
