@@ -690,8 +690,8 @@ $\lambda_L$越大越好同时$\lambda_U$越小越好，然后我们可以通过�
 \begin{figure}[!ht]
 \centering
 \includegraphics[width=0.7\textwidth]{images/hyperrectangle.png}
-\caption{二维的矩形界：$\mathscr{R}_L \subset \mathscr{R} \subset
-  \mathscr{R}_U \subset \mathscr{J}^2$。}
+\caption{二维的矩形界：$\mathscr{R}_L \subseteq \mathscr{R} \subseteq
+  \mathscr{R}_U \subseteq \mathscr{J}^2$。}
 \label{fig::hyperrectangle2D}
 \end{figure}
 
@@ -777,12 +777,12 @@ $\alpha_{Li}$，$\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$m$个区
 \end{center}
 \small
 \begin{tabular}{ll}
-  \hei 目标&对$\mathscr{R}_L \subset \mathscr{R}_U \subset \mathscr{J}^m$,
+  \hei 目标&对$\mathscr{R}_L \subseteq \mathscr{R}_U \subseteq \mathscr{J}^m$,
   直接抽取在$\mathscr{R}_U \backslash \mathscr{R}_L$中均匀分布的随机向量$\vec{X}$.\\
   \hei 输入&包含在
   $\mathscr{J}^m$中的超矩形区域$\mathscr{R}_L$和$\mathscr{R}_U$的顶点坐标数据
   $\alpha_{Lj}, \beta_{Lj}, \alpha_{Uj}, \beta_{Uj}$,\\
-  &且$\mathscr{R}_L \subset \mathscr{R}_U$, $j = 1, 2, \cdots, m$.
+  &且$\mathscr{R}_L \subseteq \mathscr{R}_U$, $j = 1, 2, \cdots, m$.
 \end{tabular}
 \begin{enumerate}
 \item 计算分块的体积（测度），并由此产生落入各分块的累计分布函数$s_j$,
@@ -1157,4 +1157,75 @@ $\mathrm{P}_i$和$\mathrm{C}_i$集合，以及如何判定在$G$中的两点$s$�
 $\phi_U(\vec{y}) = 0$和$\phi_L(\vec{y}) = 1$的样本。如何直接产生满足要
 求的样本是一个可以考虑的问题。但这个问题有一定的深度和难度。
 
+\section{Monte Carlo积分}
 
+积分问题可以看成是求面积问题的一般化。但其重要性值得我们单独讨论这个问
+题。考虑多元积分问题：
+\begin{equation}
+  \zeta(\mathscr{R}) = \int_{\mathscr{R}}\phi(\vec{x}) d\vec{x},
+  \label{eq::mc_integeration}
+\end{equation}
+其中$\phi(\vec{x})$是定义在$m$维区域$\mathscr{R} \subseteq \mathscr{J}^m$
+上的可求值的Lebesgue可积函数。为方便讨论，我们令$\phi(\vec{x}) = 0$，
+对$\vec{x} \in \mathscr{J}^m \backslash \mathscr{R}$。
+
+先考虑一维积分问题
+$$
+I = \int_a^b f(x) dx,
+$$
+我们的经典数值积分方法是通过数值积分公式：
+$$
+I_n = \sum_{i = 0}^n w_if(x_i),
+$$
+其中$w_i$称为积分权重，而$a \leq x_0 \leq x_1 \leq \cdots \leq x_n
+\leq b$被称为积分点。现在让我们类似地考虑，将$[a, b]$分割成$n$个等长的小区间，
+记为$\Delta_1, \Delta_2, \cdots, \Delta_n$，每一个小区间的长度都是$(b - a) / n$。
+记$\Delta_i$的中点为$x_{i + \frac{1}{2}}$，令$f_{i + \frac{1}{2}} := f(x_{i + \frac{1}{2}})$，$i = 1, 2, \cdots, n$。
+则一方面由可积性定义，我们有
+\begin{equation}
+  \tilde{I}_n := \sum_{i = 1}^n \frac{b - a}{n}f_{i + \frac{1}{2}} \to I, n \to \infty.
+  \label{eq::MC_integeration_eI}
+\end{equation}
+另一方面，构造$f(x)$的分段常数逼近：
+\begin{equation}
+  \tilde{f}_n(x) = f_{i + \frac{1}{2}}, x \in \Delta_i, i = 1, 2, \cdots, n.
+  \label{eq::MC_approximation_kernel}
+\end{equation}
+则显然$\tilde{f}_n(x) \to f(x)$, $n \to \infty$。
+现在对于独立随机变量$X \sim U(a, b)$，我们定义指示随机变量
+$$
+ \phi_i(X) = \left\{
+ \begin{array}{ll}
+   1, & \mbox{如果$X$落在区间$\Delta_i$上};\\
+   0, & \mbox{其他}.
+ \end{array}
+ \right.
+ $$
+
+这里$i = 1, 2, \cdots, n$，则有
+$$
+\tilde{f}_n(X) = \sum_{i = 1}^n \phi_i(X) f_{i + \frac{1}{2}}.
+$$
+于是
+$$
+\begin{array}{rcl}
+  E[\tilde{f}_n(X)] &=& \displaystyle E\left[\sum_{i = 1}^n \phi_i(X) f_{i + \frac{1}{2}}\right]\\\\
+  &=& \displaystyle \sum_{i = 1}^n \frac{1}{n} f_{i + \frac{1}{2}} \\\\
+  &=& \displaystyle \frac{1}{n}\sum_{i = 1}^nf_{i + \frac{1}{2}}
+\end{array}
+$$
+结合（\ref{eq::MC_integeration_eI}）有
+$$
+\tilde{I}_n = (b - a) E[\tilde{f}_n(X)].
+$$
+两边同取$n \to \infty$，则有
+\begin{equation}
+  I = (b - a) E[f(x)].
+  \label{eq::MC_integeration_source}
+\end{equation}
+因此，对$X_1, X_2, \cdots, X_n \sim U(0, 1)$，
+\begin{equation}
+  I_n := \frac{b - a}{n} \sum_{i = 1}^n f(X_i).
+  \label{eq::MC_integeration_estimation}
+\end{equation}
+可以看做是$I$的一个无偏估计。
