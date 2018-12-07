@@ -1073,7 +1073,7 @@ $$
 \begin{equation}
   \begin{array}{rcl}
   g_U(\vec{q}) &=&\displaystyle \sum_{\vec{y} \in \mathscr{Y}}
-  \phi_L(\vec{y}) P(\vec{y}, \vec{p}),\\ &=&\displaystyle
+  \phi_U(\vec{y}) P(\vec{y}, \vec{p}),\\ &=&\displaystyle
   \prod_{j = 1}^J\left(1 - \prod_{i \in \mathscr{C}_j}(1 - q_i)\right)
   \end{array}
   \label{eq::network_gu}
@@ -1084,7 +1084,7 @@ $\phi_U(\vec{y}) = 1$的$\vec{y}$要比$\vec{y}$的全部$2^m$种组合少得多
 我们可以构建概率密度函数
 \begin{equation}
   P(\vec{y}, \vec{q}, \lambda_L, \lambda_U) = \frac{\phi_U(\vec{y}) -
-    \phi_L(\vec{y})}{g_U(\vec{q}) - g_L(\vec{q})}P(\vec{y} - \vec{q}), \vec{y}
+    \phi_L(\vec{y})}{g_U(\vec{q}) - g_L(\vec{q})}P(\vec{y}, \vec{q}), \vec{y}
   \in \mathscr{Y}.
   \label{eq::network_bound_pdf}
 \end{equation}
@@ -1162,11 +1162,11 @@ $\phi_U(\vec{y}) = 0$和$\phi_L(\vec{y}) = 1$的样本。如何直接产生满�
 积分问题可以看成是求面积问题的一般化。但其重要性值得我们单独讨论这个问
 题。考虑多元积分问题：
 \begin{equation}
-  \zeta(\mathscr{R}) = \int_{\mathscr{R}}\phi(\vec{x}) d\vec{x},
+  \zeta(\mathscr{R}) = \int_{\mathscr{R}}\varphi(\vec{x}) d\vec{x},
   \label{eq::mc_integeration}
 \end{equation}
-其中$\phi(\vec{x})$是定义在$m$维区域$\mathscr{R} \subseteq \mathscr{J}^m$
-上的可求值的Lebesgue可积函数。为方便讨论，我们令$\phi(\vec{x}) = 0$，
+其中$\varphi(\vec{x})$是定义在$m$维区域$\mathscr{R} \subseteq \mathscr{J}^m$
+上的可求值的Lebesgue可积函数。为方便讨论，我们令$\varphi(\vec{x}) = 0$，
 对$\vec{x} \in \mathscr{J}^m \backslash \mathscr{R}$。
 
 先考虑一维积分问题
@@ -1191,7 +1191,7 @@ $$
   \tilde{f}_n(x) = f_{i + \frac{1}{2}}, x \in \Delta_i, i = 1, 2, \cdots, n.
   \label{eq::MC_approximation_kernel}
 \end{equation}
-则显然$\tilde{f}_n(x) \to f(x)$, $n \to \infty$。
+则显然$\tilde{f}_n(x) \stackrel{\mathrm{\tiny a. e.}}\longrightarrow  f(x)$, $n \to \infty$。
 现在对于独立随机变量$X \sim U(a, b)$，我们定义指示随机变量
 $$
  \phi_i(X) = \left\{
@@ -1223,9 +1223,60 @@ $$
   I = (b - a) E[f(x)].
   \label{eq::MC_integeration_source}
 \end{equation}
-因此，对$X_1, X_2, \cdots, X_n \sim U(0, 1)$，
+因此，对$X_1, X_2, \cdots, X_n \sim U(a, b)$，
 \begin{equation}
   I_n := \frac{b - a}{n} \sum_{i = 1}^n f(X_i).
   \label{eq::MC_integeration_estimation}
 \end{equation}
 可以看做是$I$的一个无偏估计。
+
+该结论可以推广到$m$维。令$\vec{X}^{(1)}, \cdots, \vec{X}^{(n)}$是$m$维
+独立随机向量，且在$\mathscr{J}^m$上均匀分布。则
+\begin{equation}
+  \bar{\zeta}_n(\mathscr{R}) = \frac{1}{n} \sum_{i = 1}^n \varphi(\vec{X}^{(i)})
+  \label{eq::bar_zeta_n}
+\end{equation}
+是（\ref{eq::mc_integeration}）中$\zeta(\mathscr{R})$的一个无偏估计，且
+\begin{equation}
+  \mathrm{var} \bar{\zeta}_n = \frac{\sigma^2}{n},
+  \label{eq::var_zeta_n}
+\end{equation}
+这里
+\begin{equation}
+  \sigma^2 = \mathrm{var} \varphi(\vec{X}) = \int_{\mathscr{R}} \varphi^2(\vec{x})dx - \zeta^2.
+  \label{eq::zeta_sigma_2}
+\end{equation}
+注意$\sigma^2$计算困难，所以可以用
+\begin{equation}
+  \hat{\sigma}^2_n = \frac{1}{n - 1}\sum_{j = 1}^n\left[\varphi(\vec{X}^{(j)}) - \bar{\zeta}_n\right]^2
+  \label{eq::zeta_hat_sigma_2_store}
+\end{equation}
+来近似。然而，此公式要求存下所有的$\varphi(\vec{X})$，才能最终和
+$\bar{\zeta}_n$进行计算，当$n$大时，对存储量要求高。作为一种近似替代，常用的估计是
+\begin{equation}
+  \hat{\sigma}^2_n = \frac{1}{n - 1}\left[\sum_{j = 1}^n \varphi^2(\vec{X}^{(j)}) - n \bar{\zeta}^2_n\right].
+  \label{eq::zeta_hat_sigma_2_encount}
+\end{equation}
+
+而对于区间估计，我们直接给出以下结果：当
+\begin{equation}
+  \int_{\mathscr{R}} \varphi^4(\vec{x}) d\vec{x} < \infty
+\end{equation}
+时，有
+$$
+\frac{\bar{\zeta}_n - \zeta}{\sqrt{\frac{\hat{\sigma}^2_n}{n}}}
+$$
+当$n \to \infty$时趋于服从$N(0, 1)$分布， 也即
+\begin{equation}
+  \lim_{n \to \infty} P\left\{\frac{\bar{\zeta}_n - \zeta}{\sqrt{\frac{\hat{\sigma}^2_n}{n}}} \leq \beta\right\} = \Phi(\beta).
+\end{equation}
+其中$\Phi$表示标准正态分布。故可以认为对充分大的$n$，区间
+\begin{equation}
+  \left[\bar{\zeta}_n - \Phi^{-1}\left(1 - \frac{\delta}{2}\right)\sqrt{\frac{\hat{\sigma}^2_n}{n}},
+    \bar{\zeta}_n + \Phi^{-1}\left(1 - \frac{\delta}{2}\right)\sqrt{\frac{\hat{\sigma}^2_n}{n}}\right]
+\end{equation}
+以概率$1 - \delta$覆盖了$\zeta$。
+
+类似面积计算，在积分计算时，我们同样应该考虑最低样本数、上下界、各种有
+效抽样以及和网络等应用问题的关系这些基本问题。限于时间我们不再课堂展开
+讨论，请大家自行参考书本的第二章的剩余部分和习题。
