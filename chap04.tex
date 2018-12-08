@@ -493,7 +493,7 @@ $$
 1 + \alpha_1 - \alpha_2 = \delta
 $$
 的$\alpha_1$和$\alpha_2$，区间$[\theta_1(S, n, \alpha_1),
-  \theta_2(S, n, \alpha_2)]$就是$\mu$关于置信水平$\delta$的范围区间，也即
+  \theta_2(S, n, \alpha_2)]$就是$\mu$关于置信水平$1-\delta$的范围区间，也即
 $$
 P\{\theta_1(S, n, \alpha_1) < \mu < \theta_2(S, n, \alpha_2)\} \geq 1 - \delta.
 $$
@@ -764,7 +764,7 @@ $\lambda_L$越大越好同时$\lambda_U$越小越好，然后我们可以通过�
 点。第二种是考虑整个$\mathscr{R}_U \backslash \mathscr{R}_L$区域被
 $\alpha_{Li}$，$\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$m$个区
 域，每个区域由两个小超矩形块组成。我们可以先从这些块中，按体积为概率选
-择一个，再在上面均匀投点，这样投点的计算量仍然是$\theta(m)$的。这两种
+择一个，再在上面均匀投点，这样投点的计算量仍然是$\Theta(m)$的。这两种
 策略的具体实现都参见参考书2.5节。其中第50页的Version C是上面的第二种思
 路的$m$维一般化，见算法（\ref{alg::MC_bound_sample_directly}）。
 
@@ -778,20 +778,19 @@ $\alpha_{Li}$，$\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$m$个区
 \small
 \begin{tabular}{ll}
   \hei 目标&对$\mathscr{R}_L \subseteq \mathscr{R}_U \subseteq \mathscr{J}^m$,
-  直接抽取在$\mathscr{R}_U \backslash \mathscr{R}_L$中均匀分布的随机向量$\vec{X}$.\\
+  直接抽取一个在$\mathscr{R}_U \backslash \mathscr{R}_L$中均匀分布的随机向量$\vec{X}$.\\
   \hei 输入&包含在
   $\mathscr{J}^m$中的超矩形区域$\mathscr{R}_L$和$\mathscr{R}_U$的顶点坐标数据
   $\alpha_{Lj}, \beta_{Lj}, \alpha_{Uj}, \beta_{Uj}$,\\
   &且$\mathscr{R}_L \subseteq \mathscr{R}_U$, $j = 1, 2, \cdots, m$.
 \end{tabular}
 \begin{enumerate}
-\item 计算分块的体积（测度），并由此产生落入各分块的累计分布函数$s_j$,
-  $j = 1, 2, \cdots, m$. 
+\item 计算分块的体积（测度）$s_j$, $j = 1, 2, \cdots, m$, 并由此产生落入各分块的累计分布函数$t_j=\sum_{i=1}^j s_i$, $j = 1, 2, \cdots, m$. 
 \item 产生一个服从$U(0, 1)$的随机数$Z$, 根据$Z$具体位置产生实际抽样分块
-  $J \in \{1, 2, \cdots, m\}$, $s_J-1 \leq Z < s_J$, $s_0 = 0$.
-\item 计算$\Delta_1 = \beta_{Uj} - \beta_{Lj}$, $\Delta_2 = \alpha_{Lj} - \alpha_{Uj}$,
-  $j = 1, 2, \cdots, m$.
-\item While $j \leq J$:
+  $J \in \{1, 2, \cdots, m\}$, $t_{J-1} \leq Z < t_J$, $t_0 = 0$.
+\item 计算$\Delta_1 = \beta_{UJ} - \beta_{LJ}$, $\Delta_2 = \alpha_{LJ} - \alpha_{UJ}$.
+\item j = 1.
+\item While $j < J$:
   \begin{enumerate}
     \item 产生服从$U(\alpha_{Lj}, \beta_{Lj})$的随机数$X_j$;
     \item j = j + 1.
@@ -804,7 +803,7 @@ $\alpha_{Li}$，$\alpha_{Ui}$，$\beta_{Li}$和$\beta_{Ui}$分成了$m$个区
 \item j = j + 1.
 \item While $j \leq m$:
   \begin{enumerate}
-  \item 产生服从$U(\alpha_{Lj}, \beta_{Uj})$的随机数$X_j$.
+  \item 产生服从$U(\alpha_{Uj}, \beta_{Uj})$的随机数$X_j$.
   \item j = j + 1.
   \end{enumerate}
 \end{enumerate}
@@ -844,7 +843,7 @@ $$
   \hei 输入&包含在
   $\mathscr{J}^m$中的区域$\mathscr{R}$, $\lambda(\mathscr{R})$的下界估计$\lambda_L$
   和上界估计$\lambda_U$, 样本尺寸$n$, 置信水平$1 - \delta$. \\
-  \hei 输出& 无偏点估计：$\bar{\lambda}_n(\mathscr{R})$, 方差$\mathrm{var}
+  \hei 输出& 无偏点估计$\bar{\lambda}_n(\mathscr{R})$, 方差$\mathrm{var}
   \bar{\lambda}_n(\mathscr{R})$ 以及置信区间.
 \end{tabular}
 \begin{enumerate}
@@ -1064,7 +1063,7 @@ $$
 \begin{equation}
   \begin{array}{rcl}
   g_L(\vec{q}) &=&\displaystyle \sum_{\vec{y} \in \mathscr{Y}}
-  \phi_L(\vec{y}) P(\vec{y}, \vec{p}),\\ &=&\displaystyle 1 - \prod_{j
+  \phi_L(\vec{y}) P(\vec{y}, \vec{q}),\\ &=&\displaystyle 1 - \prod_{j
     = 1}^I\left(1 - \prod_{i \in \mathscr{P}_j}q_i\right)
   \end{array}
   \label{eq::network_gl}
@@ -1073,7 +1072,7 @@ $$
 \begin{equation}
   \begin{array}{rcl}
   g_U(\vec{q}) &=&\displaystyle \sum_{\vec{y} \in \mathscr{Y}}
-  \phi_U(\vec{y}) P(\vec{y}, \vec{p}),\\ &=&\displaystyle
+  \phi_U(\vec{y}) P(\vec{y}, \vec{q}),\\ &=&\displaystyle
   \prod_{j = 1}^J\left(1 - \prod_{i \in \mathscr{C}_j}(1 - q_i)\right)
   \end{array}
   \label{eq::network_gu}
@@ -1116,7 +1115,7 @@ $\phi_U(\vec{y}) = 1$的$\vec{y}$要比$\vec{y}$的全部$2^m$种组合少得多
 \begin{tabular}{ll}
   \hei 目标&估算$g(\vec{q})$.\\
   \hei 输入& 网络$G = (\mathscr{V}, \mathscr{E})$, 起点$s$, 终点$t$,
-  网络可靠性向量$\vec{q}$, 置信水平$\delta$. \\
+  网络可靠性向量$\vec{q}$, 置信水平$1-\delta$. \\
   \hei 输出& $g(\vec{q})$的无偏点估计$\hat{g}_n(\vec{q})$,
   $\mathrm{var} \hat{g}_n(\vec{q})$,  以及关于$\delta$的置信区间.
 \end{tabular}
@@ -1127,9 +1126,9 @@ $\phi_U(\vec{y}) = 1$的$\vec{y}$要比$\vec{y}$的全部$2^m$种组合少得多
   \begin{enumerate}
   \item 生成$\vec{Y} = (Y_1, \cdots, Y_m)$服从概率密度函数
     $P(\vec{y}, \vec{q}, \lambda_L, \lambda_U)$.
-    \item $\phi(\vec{X}^{(j)}) = 0$.
+    \item $\phi(\vec{Y}) = 0$.
     \item If $s$ 和 $t$ 连通，$\phi(\vec{Y}) = 1$.
-    \item $S = S + \phi(\vec{Y}$.
+    \item $S = S + \phi(\vec{Y})$.
     \item j = j + 1.
   \end{enumerate}
 \item 做统计分析:
@@ -1150,7 +1149,7 @@ $\phi_U(\vec{y}) = 1$的$\vec{y}$要比$\vec{y}$的全部$2^m$种组合少得多
 \end{minipage}
 
 算法\ref{alg::MC_Network}还有几个细节没有说明，首先是如何产生
-$\mathrm{P}_i$和$\mathrm{C}_i$集合，以及如何判定在$G$中的两点$s$和$t$s
+$\mathscr{P}_i$和$\mathscr{C}_i$集合，以及如何判定在$G$中的两点$s$和$t$
 是否连通。这些是涉及图论的算法，资料很多，大家自己查阅。其次是如何产生
 分布$P(\vec{y}, \vec{q}, \lambda_L, \lambda_U)$，由于问题复杂，参考书
 建议直接采用AR方法，也即先根据$\vec{q}$随机产生$\vec{y}$，然后拒绝
@@ -1159,7 +1158,7 @@ $\phi_U(\vec{y}) = 0$和$\phi_L(\vec{y}) = 1$的样本。如何直接产生满�
 
 \section{Monte Carlo积分}
 
-积分问题可以看成是求面积问题的一般化。但其重要性值得我们单独讨论这个问
+积分问题可以看成是求面积问题的一般化。但其重要性使得我们需要单独讨论这个问
 题。考虑多元积分问题：
 \begin{equation}
   \zeta(\mathscr{R}) = \int_{\mathscr{R}}\varphi(\vec{x}) d\vec{x},
@@ -1192,7 +1191,7 @@ $$
   \label{eq::MC_approximation_kernel}
 \end{equation}
 则显然$\tilde{f}_n(x) \stackrel{\mathrm{\tiny a. e.}}\longrightarrow  f(x)$, $n \to \infty$。
-现在对于独立随机变量$X \sim U(a, b)$，我们定义指示随机变量
+现在对于随机变量$X \sim U(a, b)$，我们定义指示随机变量
 $$
  \phi_i(X) = \left\{
  \begin{array}{ll}
@@ -1201,7 +1200,6 @@ $$
  \end{array}
  \right.
  $$
-
 这里$i = 1, 2, \cdots, n$，则有
 $$
 \tilde{f}_n(X) = \sum_{i = 1}^n \phi_i(X) f_{i + \frac{1}{2}}.
@@ -1220,7 +1218,7 @@ $$
 $$
 两边同取$n \to \infty$，则有
 \begin{equation}
-  I = (b - a) E[f(x)].
+  I = (b - a) E[f(X)].
   \label{eq::MC_integeration_source}
 \end{equation}
 因此，对$X_1, X_2, \cdots, X_n \sim U(a, b)$，
@@ -1252,7 +1250,7 @@ $$
   \label{eq::zeta_hat_sigma_2_store}
 \end{equation}
 来近似。然而，此公式要求存下所有的$\varphi(\vec{X})$，才能最终和
-$\bar{\zeta}_n$进行计算，当$n$大时，对存储量要求高。作为一种近似替代，常用的估计是
+$\bar{\zeta}_n$进行计算，当$n$大时，对存储量要求高。常用的替代方案是利用其代数等价表达式
 \begin{equation}
   \hat{\sigma}^2_n = \frac{1}{n - 1}\left[\sum_{j = 1}^n \varphi^2(\vec{X}^{(j)}) - n \bar{\zeta}^2_n\right].
   \label{eq::zeta_hat_sigma_2_encount}
