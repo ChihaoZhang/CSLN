@@ -12,7 +12,7 @@
 TSP（Traveling Salesman Problem）问题，它的一种描述如下：给定$n$个城市
 和每两个城市间的距离（无向完全图，有权边），选择一条线路，使得每个城市
 只经过一次且仅有一次，并最终回到起点。求能完成这个遍历的总路径长度最短。
-对于完全图，我们用邻借矩阵（adjacency matrix）$D = [d_{ij}]$来表示全部
+对于完全图，我们用邻接矩阵（adjacency matrix）$D = [d_{ij}]$来表示全部
 城市，其中$d_{ij}$表示城市$i$和$j$之间的距离。显然，$d_{ij}$满足：
 \begin{enumerate}
 \item $d_{ij} \geq 0, 1 \leq i, j \leq n$;
@@ -75,9 +75,9 @@ $$
 为$2$-变换，如果
 $$
 \pi'= \{\pi_1, \pi_2, \cdots, \pi_{p - 1}, \pi_q, \pi_{q - 1},
-\cdots, \pi_{p - 1}, \pi_p, \pi_{q + 1}, \cdots, \pi_n\}.
+\cdots, \pi_{p + 1}, \pi_p, \pi_{q + 1}, \cdots, \pi_n\}.
 $$
-对$\forall \pi_i \in S$，称$S_i$为$\pi_i$的$2$-变换邻域，若$S_i \subseteq S$，
+$\forall \pi_i \in S$，称$S_i$为$\pi_i$的$2$-变换邻域，若$S_i \subseteq S$，
 且$\forall \pi_j \in S_i$，$\pi_j$可由$\pi_i$经一次$2$-变换得到。
 \end{definition}
 
@@ -119,20 +119,20 @@ def local_search(i0):
 \end{minipage}
 
 这个算法很通用，但也很没用。它只能提供局部最优解，对于TSP这样显然要求
-全局最优的问题，它显得很无力。（TSP算法有实用的离散算法，详见谈志奕主
+全局最优的问题，它显得很无力。（TSP算法有实用的离散算法，详见谈之奕主
   讲课程《组合优化》。）我们这里考虑能否使用随机搜索的手段，使这个算法
 摆脱局部最优解的困扰，但同时我们又要利用局部最优性。因为在没有其他任何
 信息的时候，局部最优性显然提供了一个邻域内的有效索方向。这里可以考虑的
 几个关键点是：
 \begin{enumerate}
   \item 我们在邻域内每次都做一个随机选取，即总是从$S_i$中随机抽取一个
-    $j$，作为下一步尝试的可行解。比如具体在TPS问题中，可以通过随机抽取
+    $j$，作为下一步尝试的可行解。比如具体在TSP问题中，可以通过随机抽取
     $p$和$q$来进行$2-$变换邻域内的随机抽取；
   \item 当存在邻域内的可行解$j$满足$f(j) > f(i)$时，也应该有一定概率用
     $j$去代替$i$，也就是说应该保留一定概率让解往非局部最优的方向行走，
     这样才能留下脱离局部最优解的可能性。具体这个概率应该服从什么分布？
     这个是我们接下去要讨论的问题；
-  \item 再引入了上述随机搜索之后，算法\ref{alg::LSA}的终止判定不再适用，
+  \item 在引入了上述随机搜索之后，算法\ref{alg::LSA}的终止判定不再适用，
     应该相应修改为若当前解$i$在一个指定的步数$N$（$N >> 1$）都不再变化
     时，算法终止。
 \end{enumerate}
@@ -146,13 +146,13 @@ Metropolis是一个人名，他是一个物理学家。由于工作的缘故，�
 计算机还非常低效，不太可能进行高维大范围的随机抽样。而Metropolis在求解
 一组原子结构的最低能量状态时，提出了后来被称为Metropolis准则的模拟方法。
 
-\begin{figure}[!ht]
-\centering
-\includegraphics[width=0.3\textwidth]{images/Nicholas.PNG}
-\caption{Nicholas Metropolis，1915 - 1999，希腊裔美国物理学家，曼哈顿
-  计划的参与者}
-\label{fig::game}
-\end{figure}
+%\begin{figure}[!ht]
+%\centering
+%\includegraphics[width=0.3\textwidth]{images/Nicholas.PNG}
+%\caption{Nicholas Metropolis，1915 - 1999，希腊裔美国物理学家，曼哈顿
+%  计划的参与者}
+%\label{fig::game}
+%\end{figure}
 
 物质在从液态变成固态时，系统的能量是整体降低的。粒子（我们这里不区分原
   子、分子）从能流动到被固定在一个有限范围振动，物质的结构性加强，
@@ -178,7 +178,7 @@ $j\neq i$，且状态$j$的能量为$E_j$。若$E_j < E_i$，则称状态$j$为�
 $\xi$，若$\xi < r$，则接受$j$为重要状态，否则舍弃。在一次随机尝试中，
 如果$j$是重要状态，则用$j$代替$i$成为当前状态。公式
 （\ref{eq::Metropolis}）来源于统计物理学中的Gibbs分布，而$k$是
-Boltzmann常数，而$T$是温度。受到启发，Kirkpatrick在1982年将这种居于物
+Boltzmann常数，$T$是温度。受到启发，Kirkpatrick在1982年将这种居于物
 质退火过程模拟的思想引入了组合优化领域，提出了模拟退火算法（Simulated
   Annealing Algorithm）。回顾我们之前考虑局部随机搜索算法时尚未解决的
 第2步，即解$i$应该以怎样的概率转移到解$j$？根据模拟退火法，这个转移概
@@ -194,4 +194,4 @@ Boltzmann常数，而$T$是温度。受到启发，Kirkpatrick在1982年将这�
 \end{equation}
 这里将所有参数吸收为一个$t > 0$，显然$t$越大，则转移概率越高；而$t$越
 小，转移概率越低。这与物质退火的直观一致。我们在执行算法时，可以在初期
-将$t$设的较大，然后慢慢降低$t$，最终使状态最终在一个能量低点稳定。
+将$t$设的较大，然后慢慢降低$t$，最终使状态在一个能量低点稳定。
