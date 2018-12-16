@@ -415,7 +415,6 @@ Markov是俄国数学家，他以提出Markov链理论而闻名。
 \begin{equation}
   a_i(k) = \sum_{l} a_l(k - 1)P_{li}(k).
 \end{equation}
-相当于将Markov过程量化了。
 
 \begin{definition}{\hei \bf 有限Markov链} 如果
   一个Markov链的全部可能结果是一个有限集，则称为有限（finite）Markov链。
@@ -535,14 +534,14 @@ $i$个分量$q_i$为
 也即只要转移矩阵中有一个状态能在一步回返。
 
 \begin{proof}
-  有不可约性知，对满足$P_{jj} > 0$的$j$和$\forall i \in S$，$\exists k, l \geq 1$，
+  由不可约性知，对满足$P_{jj} > 0$的$j$和$\forall i \in S$，$\exists k, l \geq 1$，
   使得$(P^k)_{ij} > 0$和$(P^l)_{ji} > 0$。故对$n = k + l$，有
   $$
   (P^n)_{ii} \geq (P^k)_{ij}(P^l)_{ji} > 0.
   $$
   而对于$n + 1$，亦有
   $$
-  (P^{n + 1})_{ii} \geq (P^k)_{ij}P_{jj}P_{ji} > 0,
+  (P^{n + 1})_{ii} \geq (P^k)_{ij}P_{jj}(P^l)_{ji} > 0,
   $$
   因此$n ,n + 1 \in D_i$，即
   $$
