@@ -12,7 +12,7 @@
 TSP（Traveling Salesman Problem）问题，它的一种描述如下：给定$n$个城市
 和每两个城市间的距离（无向完全图，有权边），选择一条线路，使得每个城市
 只经过一次且仅有一次，并最终回到起点。求能完成这个遍历的总路径长度最短。
-对于完全图，我们用邻借矩阵（adjacency matrix）$D = [d_{ij}]$来表示全部
+对于完全图，我们用邻接矩阵（adjacency matrix）$D = [d_{ij}]$来表示全部
 城市，其中$d_{ij}$表示城市$i$和$j$之间的距离。显然，$d_{ij}$满足：
 \begin{enumerate}
 \item $d_{ij} \geq 0, 1 \leq i, j \leq n$;
@@ -75,9 +75,9 @@ $$
 为$2$-变换，如果
 $$
 \pi'= \{\pi_1, \pi_2, \cdots, \pi_{p - 1}, \pi_q, \pi_{q - 1},
-\cdots, \pi_{p - 1}, \pi_p, \pi_{q + 1}, \cdots, \pi_n\}.
+\cdots, \pi_{p + 1}, \pi_p, \pi_{q + 1}, \cdots, \pi_n\}.
 $$
-对$\forall \pi_i \in S$，称$S_i$为$\pi_i$的$2$-变换邻域，若$S_i \subseteq S$，
+$\forall \pi_i \in S$，称$S_i$为$\pi_i$的$2$-变换邻域，若$S_i \subseteq S$，
 且$\forall \pi_j \in S_i$，$\pi_j$可由$\pi_i$经一次$2$-变换得到。
 \end{definition}
 
@@ -126,13 +126,13 @@ def local_search(i0):
 几个关键点是：
 \begin{enumerate}
   \item 我们在邻域内每次都做一个随机选取，即总是从$S_i$中随机抽取一个
-    $j$，作为下一步尝试的可行解。比如具体在TPS问题中，可以通过随机抽取
+    $j$，作为下一步尝试的可行解。比如具体在TSP问题中，可以通过随机抽取
     $p$和$q$来进行$2-$变换邻域内的随机抽取；
   \item 当存在邻域内的可行解$j$满足$f(j) > f(i)$时，也应该有一定概率用
     $j$去代替$i$，也就是说应该保留一定概率让解往非局部最优的方向行走，
     这样才能留下脱离局部最优解的可能性。具体这个概率应该服从什么分布？
     这个是我们接下去要讨论的问题；
-  \item 再引入了上述随机搜索之后，算法\ref{alg::LSA}的终止判定不再适用，
+  \item 在引入了上述随机搜索之后，算法\ref{alg::LSA}的终止判定不再适用，
     应该相应修改为若当前解$i$在一个指定的步数$N$（$N >> 1$）都不再变化
     时，算法终止。
 \end{enumerate}
@@ -180,8 +180,7 @@ $\xi$，若$\xi < r$，则接受$j$为重要状态，否则舍弃。在一次随
 （\ref{eq::Metropolis}）来源于统计物理学中的Gibbs分布，而$k$是
 Boltzmann常数，而$T$是温度。受到启发，Kirkpatrick在1983年
 \cite{KirkpatrickGelattVecchi83}将这种基于物质退火过程模拟的思
-想引入了组合优化领域，提出了模拟退火算法（Simulated
-  Annealing Algorithm）。回顾我们之前考虑局部随机搜索算法时尚未解决的
+想引入了组合优化领域，提出了模拟退火算法（Simulated Annealing Algorithm）。回顾我们之前考虑局部随机搜索算法时尚未解决的
 第2步，即解$i$应该以怎样的概率转移到解$j$？根据模拟退火法，这个转移概
 率可以写作：
 \begin{equation}
@@ -658,5 +657,3 @@ $$
 整。目前在整个领域中，都没有明显的理论最优值可以提供。因此每年还在源源
 不断地产生大量的论文。大家如果在SRTP或者毕业设计中有需要，不妨也考虑一
 下，不过指导教师建议大家去找更专业的老师。
-
-
